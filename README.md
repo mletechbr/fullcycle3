@@ -17,3 +17,4 @@ go mod tidy
 
 **Build Dockerfile**
 docker build -t mletech/fullcycle:latest -f Dockerfile .
+
