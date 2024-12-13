@@ -16,7 +16,7 @@ COPY main.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /desafio-go main.go
 
 # Stage 2: Final stage
-FROM alpine:edge
+FROM scratch
 
 # Set the working directory
 WORKDIR /
