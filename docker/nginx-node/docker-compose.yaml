@@ -1,0 +1,24 @@
+version: '3'
+services:
+  srvdatabase:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: srvdatabase
+    restart: always
+    tty: true
+    environment:
+      MYSQL_DATABASE: nodedb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: usr_nginx
+      MYSQL_PASSWORD: pwd_nginx
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    networks:
+      - srvnetwork
+
+networks:
+  srvnetwork:
+    name: srvnetwork
+    driver: bridge
