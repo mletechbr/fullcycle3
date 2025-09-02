@@ -22,7 +22,7 @@ services:
     build:
       context: node
     container_name: app
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 50s docker-entrypoint.sh
+    entrypoint: ["dockerize", "-wait", "tcp://db:3306", "-timeout", "50s", "--", "node", "index.js"]
     networks:
       - srvnetwork
     volumes:

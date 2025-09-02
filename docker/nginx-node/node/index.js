@@ -1,7 +1,8 @@
-const express = require('express')
+import { faker } from '@faker-js/faker';
+import express from 'express';
+import mysql from 'mysql';
 const app = express()
 const port = 3000
-const mysql = require('mysql')
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: 'db',
@@ -14,8 +15,7 @@ function insertInitialData(retries = 20) {
     pool.query(`
         CREATE TABLE IF NOT EXISTS people (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            UNIQUE KEY unique_name (name)
+            name VARCHAR(255) NOT NULL
         )`, (err) => {
             if (err) {
                 console.log(`Erro ao inserir, tentando novamente em 2s... (${retries} tentativas restantes)`)
@@ -24,10 +24,11 @@ function insertInitialData(retries = 20) {
                 return
             }
 
-            pool.query(`INSERT INTO people(name) VALUES('Fulano de Tal')`, (err) => {
-                if (err) console.error(err)
-                else console.log('Registro inserido com sucesso!')
-            })
+            const randomName = faker.person.fullName(); 
+            pool.query(`INSERT INTO people(name) VALUES(?)`, [randomName], (err) => {
+                if (err) console.error(err);
+                else console.log(`Registro inserido com sucesso: ${randomName}`);
+            });
         })
 }
 insertInitialData()
@@ -49,6 +50,6 @@ app.get('/', (req,res) => {
     });
 })
 
-app.listen(port, ()=> {
+app.listen(port, "0.0.0.0", ()=> {
     console.log('Rodando na porta ' + port)
 })
